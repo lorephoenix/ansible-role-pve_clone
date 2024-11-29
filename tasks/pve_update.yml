@@ -1,0 +1,97 @@
+---
+# tasks file for pve_clone
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+
+# -----------------------------------------------------------------------------
+# Management of Qemu(KVM) Virtual Machines in a Proxmox VE cluster
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | pve_update_vm | Update VM configuration
+  community.general.proxmox_kvm:
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port | default(8006) }}"
+#    ciupgrade: "{{ item.config.ciupgrade | default(true) }}"
+    cipassword: "{{ cipassword | default(omit) }}"
+    ciuser: "{{ item.config.ciuser | default(omit) }}"
+    cores: "{{ item.config.cores | default(omit) }}"
+    description: "{{ item.config.description | default(omit) }}"
+    ipconfig: "{{ item.config.ipconfig | default(omit) }}"
+    kvm: "{{ item.config.kvm | default(omit) }}"
+    memory: "{{ item.config.memory | default(omit) }}"
+    name: "{{ item.name }}"
+    nameservers: "{{ item.config.nameservers | default(omit) }}"
+    net: "{{ item.config.net | default(omit) }}"
+    node: "{{ pve_node }}"
+    onboot: "{{ item.config.onboot | default(omit) }}"
+    searchdomains: "{{ item.config.searchdomains | default(omit) }}"
+    sockets: "{{ item.config.sockets | default(omit) }}"
+    sshkeys: "{{ item.config.sshkeys | default(omit) }}"
+    tags: "{{ item.config.tags | default(omit) }}"
+    update: true
+    validate_certs: "{{ pve_validate_certs | default(false) }}"
+  with_items:
+    - "{{ new_vm }}"
+  when:
+    - community_general_version is none or community_general_version is version('10.1', '<')
+
+- name: (pve_clone) | pve_update_vm | Update VM configuration
+  community.general.proxmox_kvm:
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port | default(8006) }}"
+    ciupgrade: "{{ item.config.ciupgrade | default(true) }}"
+    cipassword: "{{ cipassword | default(omit) }}"
+    ciuser: "{{ item.config.ciuser | default(omit) }}"
+    cores: "{{ item.config.cores | default(omit) }}"
+    description: "{{ item.config.description | default(omit) }}"
+    ipconfig: "{{ item.config.ipconfig | default(omit) }}"
+    kvm: "{{ item.config.kvm | default(omit) }}"
+    memory: "{{ item.config.memory | default(omit) }}"
+    name: "{{ item.name }}"
+    nameservers: "{{ item.config.nameservers | default(omit) }}"
+    net: "{{ item.config.net | default(omit) }}"
+    node: "{{ pve_node }}"
+    onboot: "{{ item.config.onboot | default(omit) }}"
+    searchdomains: "{{ item.config.searchdomains | default(omit) }}"
+    sockets: "{{ item.config.sockets | default(omit) }}"
+    sshkeys: "{{ item.config.sshkeys | default(omit) }}"
+    tags: "{{ item.config.tags | default(omit) }}"
+    update: true
+    validate_certs: "{{ pve_validate_certs | default(false) }}"
+  with_items:
+    - "{{ new_vm }}"
+  when:
+    - community_general_version is not none
+    - community_general_version is version('10.1', '>=')
+
+# -----------------------------------------------------------------------------
+# Management of a disk of a Qemu(KVM) VM in a Proxmox VE cluster
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | pve_update_vm | Increment disk size
+  community.general.proxmox_disk:
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port | default(8006) }}"
+    disk: "{{ item.config.disk_id }}"
+    name: "{{ item.name }}"
+    size: "{{ item.config.disk_size }}"
+    state: resized
+    validate_certs: "{{ pve_validate_certs | default(false) }}"
+  when:
+    - item.config.disk_id is defined
+    - item.config.disk_size is defined
+  with_items:
+    - "{{ new_vm }}"
