@@ -1,0 +1,30 @@
+---
+# tasks file for pve_clone
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+
+# -----------------------------------------------------------------------------
+# Management of Qemu(KVM) Virtual Machines in a Proxmox VE cluster
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | pve_stop_vm | Stop VM with force
+  community.general.proxmox_kvm:
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port | default(8006) }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    force: true
+    name: "{{ item.name }}"
+    node: "{{ pve_node }}"
+    state: stopped
+    timeout: 300
+    validate_certs: "{{ pve_validate_certs | default(false) }}"
+  with_items:
+    - "{{ new_vm }}"
+  when: item.name in nodes_in_vms
