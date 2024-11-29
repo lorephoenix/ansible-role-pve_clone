@@ -96,7 +96,7 @@ Here’s an example of how to use this role:
             format: qcow2
             newid: 901
             storage: "local-lvm"
-```yaml
+```
 
 License
 -------
