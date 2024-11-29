@@ -13,6 +13,6 @@ pve_tokenid: "root@pam!mytokenid"
 
 # New VM configuration
 new_vm:
-  - name: "clone-vm-01"         # VM name
+  - name: "clone-vm-01"         # VM name (mandatory)
     format: raw                 # drive backing file data format (optional)
     storage: "local-lvm"        # storage identifier where to create the disk (optional)
