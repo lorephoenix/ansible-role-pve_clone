@@ -1,0 +1,7 @@
+---
+# vars file of pve_clone
+
+os_supported: true
+python_module_pkgs:
+  - python-setuptools
+  - python-proxmoxer
