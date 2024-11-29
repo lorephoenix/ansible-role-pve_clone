@@ -48,6 +48,56 @@ Dependencies
 
 Ensure the required Python packages (python-setuptools, python-proxmoxer) are installed on the Ansible controller.
 
+Example Playbook
+-------
+
+Here’s an example of how to use this role:
+
+```yaml
+- hosts: localhost
+  remote_user: root
+  roles:
+    - role: pve_clone
+      vars:
+        pve_full_copy: false
+        pve_host: "pve1.example.com"
+        pve_node: "pve1"
+        pve_pool: "dev"
+        pve_port: 8006
+        pve_state: "present"
+        pve_templateid: 900
+        pve_timeout: 300
+        pve_tokenid: "root@pam!Ansible"
+
+        # New VM configuration
+        new_vm:
+          - name: "clone-vm-1"
+            config:
+              ciupgrade: true
+              ciuser: root
+              cipassword: root
+              cores: 4
+              description: "Clone Virtual machine 1"
+              disk_id: "virtio0"
+              disk_size: "+5G"
+              ipconfig:
+                ipconfig0: 'ip=192.168.1.101/24,gw=192.168.1.1'
+              kvm: false
+              memory: 2048
+              nameservers:
+                - '192.168.1.1'
+              net:
+                net0: 'virtio,bridge=vmbr0'
+              onboot: true
+              searchdomains: 'example.com'
+              sockets: 1
+              tags:
+                - 'test'
+            format: qcow2
+            newid: 901
+            storage: "local-lvm"
+```yaml
+
 License
 -------
 
