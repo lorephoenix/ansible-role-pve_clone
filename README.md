@@ -22,8 +22,15 @@ Role Variables
 
 | Variable | Default Value | Description |
 | :--- | :--- | :---|
-| `pve_host` | `proxmox.example.com` | Proxmox server hostname or IP address.|
-| `pve_port` | `8006` |	Proxmox API port. |
+| `pve_host`       | `proxmox.example.com` | Proxmox server hostname or IP address.           |
+| `pve_port`       | `8006`                |	Proxmox API port.                             |
+| `pve_node`       | `pve`                 | The target Proxmox node for VM creation.         |
+| `pve_tokenid`    | `root@pam!mytokenid`  | API token ID for authentication.                 |
+| `pve_templateid` | `100`                 | The ID of the Proxmox VM template to clone.      |
+| `pve_full_copy`  | `true`                | Whether to create a full copy of the VM.         |
+| `pve_timeout`    | `500`                 | Timeout for API requests in seconds.             |
+| `pve_state`      | `present`             | Desired state of the VM (`present` or `absent`). |
+| `new_vm`         | See example below     | List of VM configurations for cloning.           |
 
 
 Dependencies
