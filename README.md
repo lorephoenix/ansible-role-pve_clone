@@ -19,6 +19,22 @@ To install the collection:
 
 Role Variables
 --------------
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th {
+    background-color: #3e3e3e; /* Dark gray */
+    color: white;
+    padding: 8px;
+    text-align: left;
+  }
+  td {
+    padding: 8px;
+    border: 1px solid #ddd;
+  }
+</style>
 
 | Variable | Default Value | Description |
 | :--- | :--- | :---|
