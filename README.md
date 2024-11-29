@@ -23,7 +23,7 @@ Role Variables
 The following variables can be customized to suit your environment. Default values are defined in `defaults/main.yml`
 
 | Variable | Default Value | Data Type | Required | Description |
-| :--- | :--- | :--- | :---|
+| :--- | :--- | :--- | :--- | :--- |
 | `pve_full_copy`  | `true`               | Boolean               | Mandatory | Whether to create a full copy of the VM.         |
 | `pve_host`       | `proxmox.example.com`| String                | Mandatory | Proxmox server hostname or IP address.           |
 | `pve_node`       | `pve`                | String                | Mandatory | The target Proxmox node for VM creation.         |
