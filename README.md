@@ -22,17 +22,18 @@ Role Variables
 
 The following variables can be customized to suit your environment. Default values are defined in `defaults/main.yml`
 
-| Variable | Default Value | Data Type | Description |
+| Variable | Default Value | Data Type | Required | Description |
 | :--- | :--- | :--- | :---|
-| `pve_full_copy`  | `true`               | Boolean               | Whether to create a full copy of the VM.         |
-| `pve_host`       | `proxmox.example.com`| String                | Proxmox server hostname or IP address.           |
-| `pve_node`       | `pve`                | String                | The target Proxmox node for VM creation.         |
-| `pve_port`       | `8006`               | Integer               |	Proxmox API port.                             |
-| `pve_state`      | `present`            | String                | Desired state of the VM (`present` or `absent`). |
-| `pve_templateid` | `100`                | Integer               | The ID of the Proxmox VM template to clone.      |
-| `pve_timeout`    | `500`                | Integer               | Timeout for API requests in seconds.             |
-| `pve_tokenid`    | `root@pam!mytokenid` | String                | API token ID for authentication.                 |
-| `new_vm`         | See example below    | List of dictionaries  | List of VM configurations for cloning.           |
+| `pve_full_copy`  | `true`               | Boolean               | Mandatory | Whether to create a full copy of the VM.         |
+| `pve_host`       | `proxmox.example.com`| String                | Mandatory | Proxmox server hostname or IP address.           |
+| `pve_node`       | `pve`                | String                | Mandatory | The target Proxmox node for VM creation.         |
+| `pve_port`       | `8006`               | Integer               | Optional  |	Proxmox API port.                             |
+| `pve_state`      | `present`            | String                | Mandatory | Desired state of the VM (`present` or `absent`). |
+| `pve_templateid` | `100`                | Integer               | Mandatory | The ID of the Proxmox VM template to clone.      |
+| `pve_timeout`    | `500`                | Integer               | Optional  | Timeout for API requests in seconds.             |
+| `pve_tokenid`    | `root@pam!mytokenid` | String                | Mandatory | API token ID for authentication.                 |
+| `pve_token_secret` | `root@pam!mytokenid` | String              | Mandatory | API token ID for authentication.                 |
+| `new_vm`         | See example below    | List of dictionaries  | Mandatory | List of VM configurations for cloning.           |
 
 ### `new_vm` Example:
 
