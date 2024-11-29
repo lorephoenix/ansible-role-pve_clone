@@ -1,0 +1,18 @@
+---
+# default file for pve_clone
+
+# Proxmox connection details
+pve_full_copy: true
+pve_host: "proxmox.example.com"
+pve_node: "proxmox"
+pve_port: 8006
+pve_state: "present"
+pve_templateid: 100
+pve_timeout: 500
+pve_tokenid: "root@pam!mytokenid"
+
+# New VM configuration
+new_vm:
+  - name: "clone-vm-01"         # VM name
+    format: raw                 # drive backing file data format (optional)
+    storage: "local-lvm"        # storage identifier where to create the disk (optional)
