@@ -1,0 +1,84 @@
+---
+# tasks file for pve_clone
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+
+# -----------------------------------------------------------------------------
+# Load variables from files, dynamically within a task
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | main | Load OS dependent variables
+  ansible.builtin.include_vars: '{{ item_os }}'
+  with_first_found:
+    - files:
+        - '{{ ansible_distribution | lower }}_{{ ansible_distribution_major_version | lower }}.yml'
+        - '{{ ansible_distribution | lower }}.yml'
+        - '{{ ansible_os_family | lower }}_{{ ansible_distribution_major_version | lower }}.yml'
+        - '{{ ansible_os_family | lower }}.yml'
+      skip: false
+  loop_control:
+    loop_var: item_os
+  tags:
+    - prerequisite
+
+# -----------------------------------------------------------------------------
+# Import task the current playbook for subsequent execution
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | main | Import 'prerequisite' task statically
+  ansible.builtin.import_tasks: "prerequisite.yml"
+  tags:
+    - prerequisite
+
+- name: (pve_clone) | main | Import 'pve_precheck' task statically
+  ansible.builtin.import_tasks: "pve_precheck.yml"
+  tags:
+    - precheck
+    - remove
+
+# -----------------------------------------------------------------------------
+# Create/clone VM's
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | main | Dynamically include a task list when 'pve_state' is set as 'present'
+  when:
+    - pve_state|lower == "present"
+
+  block:
+    # -------------------------------------------------------------------------
+    # Import task the current playbook for subsequent execution
+    # -------------------------------------------------------------------------
+    - name: (pve_clone) | main | Import 'pve_clone_vm' task statically
+      ansible.builtin.import_tasks: "pve_clone_vm.yml"
+      tags:
+        - clone
+
+    - name: (pve_clone) | main | Import 'pve_update_vm' tasks statically
+      ansible.builtin.import_tasks: "pve_update_vm.yml"
+      tags:
+        - update
+
+    - name: (pve_clone) | main | Import 'pve_start_vm' tasks statically
+      ansible.builtin.import_tasks: "pve_start_vm.yml"
+
+# -----------------------------------------------------------------------------
+# Remove VM's
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | main | Dynamically include a task list when 'pve_state' is set as 'absent'
+  when:
+    - pve_state|lower == "absent"
+  tags:
+    - remove
+
+  block:
+    # -------------------------------------------------------------------------
+    # Import task the current playbook for subsequent execution
+    # -------------------------------------------------------------------------
+    - name: (pve_clone) | main | Import 'pve_stop_vm' tasks statically
+      ansible.builtin.import_tasks: "pve_stop_vm.yml"
+
+    - name: (pve_clone) | main | Import 'pve_remove_vm' tasks statically
+      ansible.builtin.import_tasks: "pve_remove_vm.yml"
