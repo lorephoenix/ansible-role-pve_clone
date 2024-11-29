@@ -19,6 +19,7 @@ To install the collection:
 
 Role Variables
 --------------
+
 <style>
   table {
     border-collapse: collapse;
