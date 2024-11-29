@@ -41,6 +41,7 @@ new_vm:
   - name: "clone-vm-01"
     format: raw
     storage: "local-lvm"
+```
 
 Dependencies
 ------------
