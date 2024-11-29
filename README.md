@@ -22,15 +22,15 @@ Role Variables
 
 | Variable | Data Types | Default Value | Description |
 | :--- | :--- | :--- | :---|
-| `pve_host`       | String     | `proxmox.example.com` | Proxmox server hostname or IP address.           |
-| `pve_port`       | Integer    | `8006`                |	Proxmox API port.                             |
-| `pve_node`       | String     | `pve`                 | The target Proxmox node for VM creation.         |
-| `pve_tokenid`    | String     | `root@pam!mytokenid`  | API token ID for authentication.                 |
-| `pve_templateid` | Integer    | `100`                 | The ID of the Proxmox VM template to clone.      |
-| `pve_full_copy`  | Boolean    | `true`                | Whether to create a full copy of the VM.         |
-| `pve_timeout`    | Integer    | `500`                 | Timeout for API requests in seconds.             |
-| `pve_state`      | String     | `present`             | Desired state of the VM (`present` or `absent`). |
-| `new_vm`         | List       | See example below     | List of VM configurations for cloning.           |
+| `pve_host`       | String               | `proxmox.example.com` | Proxmox server hostname or IP address.           |
+| `pve_port`       | Integer              | `8006`                |	Proxmox API port.                             |
+| `pve_node`       | String               | `pve`                 | The target Proxmox node for VM creation.         |
+| `pve_tokenid`    | String               | `root@pam!mytokenid`  | API token ID for authentication.                 |
+| `pve_templateid` | Integer              | `100`                 | The ID of the Proxmox VM template to clone.      |
+| `pve_full_copy`  | Boolean              | `true`                | Whether to create a full copy of the VM.         |
+| `pve_timeout`    | Integer              | `500`                 | Timeout for API requests in seconds.             |
+| `pve_state`      | String               | `present`             | Desired state of the VM (`present` or `absent`). |
+| `new_vm`         | List of dictionaries | See example below     | List of VM configurations for cloning.           |
 
 
 Dependencies
