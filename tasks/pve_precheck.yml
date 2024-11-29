@@ -1,0 +1,101 @@
+---
+# tasks file for pve_clone
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+
+# -----------------------------------------------------------------------------
+# Retrieve information about one or more Proxmox VE nodes
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | pve_precheck | Get a list of Proxmox nodes & verify if node exists
+  community.general.proxmox_node_info:
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    validate_certs: "{{ pve_validate_certs | default(false) }}"
+  register: nodes
+  failed_when: >
+    nodes.proxmox_nodes
+    | selectattr('node', 'match', pve_node)
+    | map(attribute='node')
+    | list
+    | length == 0
+  changed_when: false
+
+# -----------------------------------------------------------------------------
+# Set host variable(s) and fact(s)
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | pve_precheck | Extract list of nodes
+  ansible.builtin.set_fact:
+    node_list: "{{ nodes.proxmox_nodes | map(attribute='node') | list }}"
+
+# -----------------------------------------------------------------------------
+# Retrieve information about one or more Proxmox VE nodes
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | pve_precheck | Collect VMs from Proxmox nodes
+  community.general.proxmox_vm_info:
+    api_host: "{{ pve_host }}"
+    api_port: "{{ pve_port }}"
+    api_token_id: "{{ pve_tokenid.split('!')[1] }}"
+    api_token_secret: "{{ pve_token_secret }}"
+    api_user: "{{ pve_tokenid.split('!')[0] }}"
+    node: "{{ item }}"
+    validate_certs: "{{ pve_validate_certs | default(false) }}"
+  loop: "{{ node_list }}"
+  register: vm_info
+
+# -----------------------------------------------------------------------------
+# Ensure variable(s) meets condition(s)
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | pve_precheck | Verify if defined 'pve_templateid' exist
+  ansible.builtin.assert:
+    that:
+      - pve_templateid is not none
+      - vm_info is not none
+      - vm_info.results | selectattr('item', 'equalto', pve_node)
+                   | map(attribute='proxmox_vms')
+                   | first
+                   | map(attribute='vmid')
+                   | list
+                   | select('equalto', pve_templateid)
+                   | list
+                   | length > 0
+    fail_msg: "Template id '{{ pve_templateid }}' does not exist on Proxmox node '{{ pve_node }}'"
+    success_msg: "Template id '{{ pve_templateid }}' exist on Proxmox node '{{ pve_node }}'"
+
+# -----------------------------------------------------------------------------
+# Set host variable(s) and fact(s)
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | pve_precheck | Extract list of all VMs from all nodes
+  ansible.builtin.set_fact:
+    all_vms: "{{ vm_info.results | map(attribute='proxmox_vms') | list | flatten | map(attribute='name') | list | flatten }}"
+
+- name: (pve_clone) | pve_precheck | Determine if all new VMs are missing from existing VMs
+  ansible.builtin.set_fact:
+    all_nodes_missing: >-
+        {{ (((new_vm | map(attribute='name') | list | flatten) | difference(all_vms) | length) ==
+              (new_vm | map(attribute='name') | list | flatten | length)) | bool }}
+  when: pve_state|lower == "present"
+
+- name: (pve_clone) | pve_precheck | Find intersection of new_vm and all_vms
+  ansible.builtin.set_fact:
+    nodes_in_vms: "{{ (new_vm | map(attribute='name') | list | flatten) | intersect(all_vms) }}"
+  when: pve_state|lower == "absent"
+
+# -----------------------------------------------------------------------------
+# Ensure variable(s) meets condition(s)
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | pve_precheck | Verify all new VMs are missing
+  ansible.builtin.assert:
+    that:
+      - all_nodes_missing
+    fail_msg: "Some or all nodes {{ (new_vm | map(attribute='name') | list | flatten) | intersect(all_vms) }} already exists on the Proxmox cluster"
+    success_msg: "No previous VM node installation found on the Proxmox cluster"
+  when: pve_state|lower == "present"
