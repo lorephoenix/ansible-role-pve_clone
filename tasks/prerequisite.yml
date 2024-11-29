@@ -1,0 +1,78 @@
+---
+# tasks file for pve_clone
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+
+# -----------------------------------------------------------------------------
+# Set host variable(s) and fact(s)
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | prerequisite | Get community.general collection version
+  ansible.builtin.set_fact:
+    community_general_version: "{{ lookup('community.general.collection_version', 'community.general') }}"
+
+- name: (pve_clone) | prerequisite | Define 'pve_state' variable, if not exist
+  ansible.builtin.set_fact:
+    pve_state: "present"
+  when:
+    - pve_state is undefined or (pve_state|lower) != "absent"
+
+# -----------------------------------------------------------------------------
+# Ensure variable(s) meets condition(s)
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | prerequisite | OS is supported.
+  ansible.builtin.assert:
+    that: os_supported == True
+
+- name: (pve_clone) | prerequisite | Enforce minimum Ansible version
+  ansible.builtin.assert:
+    that:
+      - ansible_version.full is version('2.17', '>=')
+    msg: "Minimum ansible-core version required is 2.17"
+
+- name: (pve_clone) | prerequisite | Assert community.general version is 9.4.0 or higher
+  ansible.builtin.assert:
+    that:
+      - community_general_version is not none
+      - community_general_version is version('9.4.0', '>=')
+    fail_msg: "community.general collection must be version 9.4.0 or higher! Current version: {{ community_general_version }}"
+    success_msg: "community.general collection is version 9.4.0 or higher!"
+
+- name: (pve_clone) | prerequisite | Verify if dictionary key 'name' exist under each element of list 'new_vm'
+  ansible.builtin.assert:
+    that:
+      - item.name is defined
+    fail_msg: "Missing dictionary key 'name' under list 'new_vm'. See problemeatic elements {{ new_vm | selectattr('name', 'undefined') }}"
+    success_msg: "All elements of list 'new_vm' have a dictionary key 'name'"
+    quiet: true
+  with_items:
+    - "{{ new_vm }}"
+
+# -----------------------------------------------------------------------------
+# Use universal package manager to install required package(s)
+# -----------------------------------------------------------------------------
+- name: (pve_clone) | prerequisite | Ensure that the Python module packages are installed
+  ansible.builtin.package:
+    name: '{{ item }}'
+    state: present
+  with_items: "{{ python_module_pkgs }}"
+  become: true
+
+# -----------------------------------------------------------------------------
+# Dynamically include a task list
+# -----------------------------------------------------------------------------
+# Load 'os_{{ ansible_os_family }}.yml' task file
+- name: (pve_clone) | prerequisite | Load OS dependent tasks
+  ansible.builtin.include_tasks: "{{ item_os }}"
+  with_first_found:
+    - files:
+        - 'os_{{ ansible_distribution | lower }}_{{ ansible_distribution_major_version | lower }}.yml'
+        - 'os_{{ ansible_os_family | lower }}.yml'
+      skip: false
+  loop_control:
+    loop_var: item_os
