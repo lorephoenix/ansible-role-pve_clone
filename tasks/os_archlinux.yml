@@ -1,0 +1,16 @@
+---
+# tasks file for pve_clone
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+- name: (pve_clone) | os_archlinux | Upgrade all packages
+  community.general.pacman:
+      force: true
+      update_cache: true
+      upgrade: true
+  become: true
