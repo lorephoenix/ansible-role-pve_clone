@@ -22,7 +22,7 @@ Role Variables
 
 | Variable | Default Value | Description |
 | ---------|---------------|-------------|
-| pve_host | proxmox.example.com | Proxmox server hostname or IP address.|
+| `pve_host` | proxmox.example.com | Proxmox server hostname or IP address.|
 
 Dependencies
 ------------
