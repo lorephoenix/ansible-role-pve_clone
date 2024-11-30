@@ -12,10 +12,10 @@ galaxy_info:
         - all
     - name: Debian
       versions:
-        - 12
+        - bookworm
     - name: Ubuntu
       versions:
-        - 24.04
+        - noble
   galaxy_tags:
     - proxmox
 dependencies: []
