@@ -13,6 +13,9 @@ galaxy_info:
     - name: Debian
       versions:
         - bookworm
+    -name: Gentoo
+      versions:
+        - all
     - name: Ubuntu
       versions:
         - noble
