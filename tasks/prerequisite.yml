@@ -54,16 +54,6 @@
     - "{{ new_vm }}"
 
 # -----------------------------------------------------------------------------
-# Use universal package manager to install required package(s)
-# -----------------------------------------------------------------------------
-- name: (pve_clone) | prerequisite | Ensure that the Python module packages are installed
-  ansible.builtin.package:
-    name: '{{ item }}'
-    state: present
-  with_items: "{{ python_module_pkgs }}"
-  become: true
-
-# -----------------------------------------------------------------------------
 # Dynamically include a task list
 # -----------------------------------------------------------------------------
 # Load 'os_{{ ansible_os_family }}.yml' task file
@@ -76,3 +66,15 @@
       skip: false
   loop_control:
     loop_var: item_os
+
+- name: (pve_clone) | prerequisite | Load 'pkgs' tasks
+  ansible.builtin.include_tasks: "pkgs.yml"
+  when:
+    - linux_pkgs is defined
+    - linux_pkgs | length > 0
+
+- name: (pve_clone) | prerequisite | Load 'pip' tasks
+  ansible.builtin.include_tasks: "pip.yml"
+  when:
+    - python_module_pkgs is defined
+    - python_module_pkgs | length > 0
