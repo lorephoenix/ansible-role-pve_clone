@@ -55,22 +55,25 @@ The new_vm variable allows you to define the configuration for new virtual machi
 | `new_vm.storage`   | `"local-lvm"`   | String      | Optional  | Storage location for the VM.                         |
 | `new_vm.config`    | -               | Dictionary  | Optional  | VM configuration parameters.                         |
 
-| `new_vm.config.ciupgrade`  | `true`                                 | Boolean      | Optional  | Whether to enable cloud-init upgrades.                               |
-| `new_vm.config.ciuser`     | `"root"`                               | String       | Optional  | Default user for cloud-init.                                         |
-| `new_vm.config.cipassword` | `"root"`                               | String       | Optional  | Default password for cloud-init.                                     |
-| `new_vm.config.cores`      | `4`                                    | Integer      | Optional  | Number of CPU cores allocated to the VM.                             |
-| `new_vm.config.description`| `"Clone Virtual machine 1"`            | String       | Optional  | Description of the VM.                                               |
-| `new_vm.config.disk_id`    | `"virtio0"`                            | String       | Optional  | The disk identifier.                                                 |
-| `new_vm.config.disk_size`  | `"+5G"`                                | String       | Optional  | Additional disk size to allocate.                                    |
-| `new_vm.config.ipconfig.ipconfig0` | `'ip=192.168.1.101/24,gw=192.168.1.1'` | String | Optional  | Network configuration for the VM.                                  |
-| `new_vm.config.kvm`        | `false`                                | Boolean      | Optional  | Whether to enable or disable KVM hardware virtualization.            |
-| `new_vm.config.memory`     | `2048`                                 | Integer      | Optional  | Amount of RAM (in MB) allocated to the VM.                           |
-| `new_vm.config.nameservers`| `['192.168.1.1']`                      | List         | Optional  | List of nameservers for the VM.                                      |
-| `new_vm.config.net.net0`   | `'virtio,bridge=vmbr0'`                | String       | Optional  | Network adapter configuration (type and bridge).                     |
-| `new_vm.config.onboot`     | `true`                                 | Boolean      | Optional  | Whether to start the VM on Proxmox node boot.                        |
-| `new_vm.config.searchdomains`| `"example.com"`                      | String       | Optional  | DNS search domain for the VM.                                        |
-| `new_vm.config.sockets`    | `1`                                    | Integer      | Optional  | Number of CPU sockets allocated to the VM.                           |
-| `new_vm.config.tags`       | `['test']`                             | List         | Optional  | Tags associated with the VM.                                         |
+Below is the structure and explanation of each optional sub-variable from the dictonary `new_vm.config`.
+| Variable | Value | Data Type | Required | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `new_vm.config.ciupgrade`  | `true`                                 | Boolean      | Optional  | Whether to enable cloud-init upgrades.                    |
+| `new_vm.config.ciuser`     | `"root"`                               | String       | Optional  | Default user for cloud-init.                              |
+| `new_vm.config.cipassword` | `"root"`                               | String       | Optional  | Default password for cloud-init.                          |
+| `new_vm.config.cores`      | `4`                                    | Integer      | Optional  | Number of CPU cores allocated to the VM.                  |
+| `new_vm.config.description`| `"Clone Virtual machine 1"`            | String       | Optional  | Description of the VM.                                    |
+| `new_vm.config.disk_id`    | `"virtio0"`                            | String       | Optional  | The disk identifier.                                      |
+| `new_vm.config.disk_size`  | `"+5G"`                                | String       | Optional  | Additional disk size to allocate.                         |
+| `new_vm.config.ipconfig.ipconfig0` | `'ip=192.168.1.101/24,gw=192.168.1.1'` | String | Optional  | Network configuration for the VM.                       |
+| `new_vm.config.kvm`        | `false`                                | Boolean      | Optional  | Whether to enable or disable KVM hardware virtualization. |
+| `new_vm.config.memory`     | `2048`                                 | Integer      | Optional  | Amount of RAM (in MB) allocated to the VM.                |
+| `new_vm.config.nameservers`| `['192.168.1.1']`                      | List         | Optional  | List of nameservers for the VM.                           |
+| `new_vm.config.net.net0`   | `'virtio,bridge=vmbr0'`                | String       | Optional  | Network adapter configuration (type and bridge).          |
+| `new_vm.config.onboot`     | `true`                                 | Boolean      | Optional  | Whether to start the VM on Proxmox node boot.             |
+| `new_vm.config.searchdomains`| `"example.com"`                      | String       | Optional  | DNS search domain for the VM.                             |
+| `new_vm.config.sockets`    | `1`                                    | Integer      | Optional  | Number of CPU sockets allocated to the VM.                |
+| `new_vm.config.tags`       | `['test']`                             | List         | Optional  | Tags associated with the VM.                              |
 
 
 Dependencies
