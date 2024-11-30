@@ -75,6 +75,8 @@ Below is the structure and explanation of each optional sub-variable from the di
 | `new_vm.config.tags`       | `['test']`               | List         | Optional  | Tags associated with the VM.                              |
 | `new_vm.config.ipconfig    | -                        | Dictionary   | Optional  | Set the IP configuration                                  |
 
+| Variable | Value | Data Type | Required | Description |
+| :--- | :--- | :--- | :--- | :--- |
 | `new_vm.config.ipconfig.ipconfig0` | `'ip=192.168.1.101/24,gw=192.168.1.1'` | String | Optional  | Network configuration for the VM.                       |
 
 Dependencies
