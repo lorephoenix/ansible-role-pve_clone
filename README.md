@@ -65,7 +65,6 @@ Below is the structure and explanation of each optional sub-variable from the di
 | `new_vm.config.description`| `"Clone Virtual machine 1"`            | String       | Optional  | Description of the VM.                                    |
 | `new_vm.config.disk_id`    | `"virtio0"`                            | String       | Optional  | The disk identifier.                                      |
 | `new_vm.config.disk_size`  | `"+5G"`                                | String       | Optional  | Additional disk size to allocate.                         |
-| `new_vm.config.ipconfig.ipconfig0` | `'ip=192.168.1.101/24,gw=192.168.1.1'` | String | Optional  | Network configuration for the VM.                       |
 | `new_vm.config.kvm`        | `false`                                | Boolean      | Optional  | Whether to enable or disable KVM hardware virtualization. |
 | `new_vm.config.memory`     | `2048`                                 | Integer      | Optional  | Amount of RAM (in MB) allocated to the VM.                |
 | `new_vm.config.nameservers`| `['192.168.1.1']`                      | List         | Optional  | List of nameservers for the VM.                           |
@@ -75,7 +74,7 @@ Below is the structure and explanation of each optional sub-variable from the di
 | `new_vm.config.sockets`    | `1`                                    | Integer      | Optional  | Number of CPU sockets allocated to the VM.                |
 | `new_vm.config.tags`       | `['test']`                             | List         | Optional  | Tags associated with the VM.                              |
 
-
+| `new_vm.config.ipconfig.ipconfig0` | `'ip=192.168.1.101/24,gw=192.168.1.1'` | String | Optional  | Network configuration for the VM.                       |
 Dependencies
 ------------
 
