@@ -36,6 +36,7 @@ The following variables can be customized to suit your environment. Default valu
 | `pve_token_secret`  | `*******`            | String                | Mandatory | API secret token                                 |
 | `pve_validate_certs`| `false`              | Boolean               | Optional  | Verify SSL certificate if using HTTPS.           |
 | `new_vm`            | See example below    | List of dictionaries  | Mandatory | List of VM configurations for cloning.           |
+| `new_vm.name`       | `"clone-vm-1"`       | String                | Mandatory | The name of the new VM.           |
 
 ### `new_vm` Example:
 
