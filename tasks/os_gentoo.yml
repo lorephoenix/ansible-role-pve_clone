@@ -1,0 +1,17 @@
+---
+# tasks file for pve_clone
+#
+#  ████████╗ █████╗ ███████╗██╗  ██╗
+#  ╚══██╔══╝██╔══██╗██╔════╝██║ ██╔╝
+#     ██║   ███████║███████╗█████╔╝
+#     ██║   ██╔══██║╚════██║██╔═██╗
+#     ██║   ██║  ██║███████║██║  ██╗
+#     ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+#
+- name: (pve_clone) | os_gentoo | Update all installed packages
+  community.general.portage:
+      deep: true
+      newuse: true
+      package: '@world'
+      update: true
+  become: true
