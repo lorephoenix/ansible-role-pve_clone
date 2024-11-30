@@ -47,11 +47,13 @@ new_vm:
     storage: "local-lvm"
 ```
 
-The new_vm variable allows you to define the configuration for new virtual machines to be created. Below is the structure and explanation of each sub-variable:
+The new_vm variable allows you to define the configuration for new virtual machines to be created. Below is the structure and explanation of each optional sub-variable:
 | Variable | Value | Data Type | Required | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| `new_vm`                   | -                                      | List         | Mandatory | A list of virtual machine configurations. Each item represents a VM. |
-| `new_vm.name`              | `"clone-vm-1"`                         | String       | Mandatoty | The name of the new VM.                                              |
+| `new_vm.format`            | `"qcow2"`       | String  | Optional  | Disk image format for the VM (e.g., `qcow2`, `raw`). |
+| `new_vm.newid`             | `901`           | Integer | Optional  | Unique identifier for the new VM.                    |
+| `new_vm.storage`           | `"local-lvm"`   | String  | Optional  | Storage location for the VM.                         |
+
 | `new_vm.config`            | -                                      | Dictionary   | Optional  | VM configuration parameters.                                         |
 | `new_vm.config.ciupgrade`  | `true`                                 | Boolean      | Optional  | Whether to enable cloud-init upgrades.                               |
 | `new_vm.config.ciuser`     | `"root"`                               | String       | Optional  | Default user for cloud-init.                                         |
@@ -69,9 +71,6 @@ The new_vm variable allows you to define the configuration for new virtual machi
 | `new_vm.config.searchdomains`| `"example.com"`                      | String       | Optional  | DNS search domain for the VM.                                        |
 | `new_vm.config.sockets`    | `1`                                    | Integer      | Optional  | Number of CPU sockets allocated to the VM.                           |
 | `new_vm.config.tags`       | `['test']`                             | List         | Optional  | Tags associated with the VM.                                         |
-| `new_vm.format`            | `"qcow2"`                              | String       | Optional  | Disk image format for the VM (e.g., `qcow2`, `raw`).                 |
-| `new_vm.newid`             | `901`                                  | Integer      | Optional  | Unique identifier for the new VM.                                    |
-| `new_vm.storage`           | `"local-lvm"`                          | String       | Optional  | Storage location for the VM.                                         |
 
 
 Dependencies
